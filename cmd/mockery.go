@@ -275,7 +275,12 @@ func (r *RootApp) Run() error {
 
 	var generated bool
 	if r.Config.List != "" {
-		pathList := BuildList(r.Config.List)
+		var pathList []string
+		if strings.HasSuffix(r.Config.List, ".go") {
+			pathList = []string { r.Config.List }
+		} else {
+			pathList = BuildList(r.Config.List)
+		}
 		generated = walker.WalkList(ctx, visitor, pathList)
 	} else {
 		generated = walker.Walk(ctx, visitor)
