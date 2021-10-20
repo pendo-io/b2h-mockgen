@@ -74,7 +74,7 @@ func NewRootCmd() *cobra.Command {
 	pFlags.String("boilerplate-file", "", "File to read a boilerplate text from. Text should be a go block comment, i.e. /* ... */")
 	pFlags.Bool("unroll-variadic", true, "For functions with variadic arguments, do not unroll the arguments into the underlying testify call. Instead, pass variadic slice as-is.")
 	pFlags.Bool("exported", false, "Generates public mocks for private interfaces.")
-	pFlags.Bool("list", false, "generate list to be passed into walker")
+	pFlags.String("list", "", "generate list to be passed into walker")
 
 	viper.BindPFlags(pFlags)
 
@@ -274,8 +274,8 @@ func (r *RootApp) Run() error {
 	}
 
 	var generated bool
-	if r.Config.List {
-		pathList := BuildList()
+	if r.Config.List != "" {
+		pathList := BuildList(r.Config.List)
 		generated = walker.WalkList(ctx, visitor, pathList)
 	} else {
 		generated = walker.Walk(ctx, visitor)

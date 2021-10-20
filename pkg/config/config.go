@@ -33,7 +33,7 @@ type Config struct {
 	FileName             string
 	InPackage            bool
 	KeepTree             bool
-	List                 bool
+	List                 string
 	LogLevel             string `mapstructure:"log-level"`
 	Name                 string
 	Note                 string

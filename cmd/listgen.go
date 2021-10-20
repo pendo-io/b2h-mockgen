@@ -91,9 +91,9 @@ func parseDir(path string) {
 	}
 }
 
-func BuildList() []string {
+func BuildList(rootDir string) []string {
 	fI = make(fileInts, 0)
-	parseDir("src/pendo.io")
+	parseDir(rootDir)
 	pathList := make([]string, len(fI))
 	for i, fi := range fI {
 		pathList[i] = fi.filename
