@@ -177,6 +177,7 @@ func (p *Parser) ParseList(ctx context.Context, paths []string) error {
 			continue
 		}
 
+		p.conf.Dir = filepath.Dir(path)
 		pkgs, err := p.loadPackages(path)
 		if err != nil {
 			return err
