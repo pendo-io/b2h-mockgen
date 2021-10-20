@@ -110,7 +110,11 @@ func (w *Walker) WalkList(ctx context.Context, visitor WalkerVisitor, paths []st
 	log.Info().Msgf("Walking")
 
 	parser := NewParser(w.BuildTags)
-	w.doWalkList(ctx, parser, paths)
+	invalidWalk := w.doWalkList(ctx, parser, paths)
+	if invalidWalk {
+		fmt.Fprintf(os.Stderr, "Error creating walk list")
+		os.Exit(1)
+	}
 
 	err := parser.Load()
 	if err != nil {
@@ -136,7 +140,7 @@ func (w *Walker) WalkList(ctx context.Context, visitor WalkerVisitor, paths []st
 	return
 }
 
-func (w *Walker) doWalkList(ctx context.Context, p *Parser, paths []string) (generated bool) {
+func (w *Walker) doWalkList(ctx context.Context, p *Parser, paths []string) bool {
 	for _,path := range paths {
 		if strings.HasPrefix(filepath.Base(path), ".") || strings.HasPrefix(filepath.Base(path), "_") {
 			log.Error().Msgf("Invalid File")
@@ -148,6 +152,7 @@ func (w *Walker) doWalkList(ctx context.Context, p *Parser, paths []string) (gen
 			return true
 		}
 	}
+
 	err := p.ParseList(ctx, paths)
 	if err != nil {
 		log.Err(err).Msgf("Error parsing file")
