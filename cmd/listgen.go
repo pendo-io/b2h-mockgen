@@ -74,11 +74,18 @@ func parseDir(path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	dirContainsMock := false
+	for _, file := range files {
+		if file.Name() == "mock" {
+			dirContainsMock = true
+			break
+		}
+	}
 	for _, file := range files {
 		filePath := fmt.Sprintf("%s/%s", path, file.Name())
 		if file.IsDir() {
 			parseDir(filePath)
-		} else if strings.HasSuffix(file.Name(), ".go") {
+		} else if strings.HasSuffix(file.Name(), ".go") && dirContainsMock {
 			parseFile(path, filePath)
 		}
 	}
